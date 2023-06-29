@@ -562,9 +562,8 @@ struct timeval tv;
 double delay,avg_delay,avg_loss;
 double tmp;
 int i;
-int previous_received;
 struct alarm_list *al;
-struct active_alarm_list *aal,*paa,*naa;
+struct active_alarm_list *aal,*naa;
 struct alarm_cfg *a;
 
 	if (icmp_seq!=(ti->seq%65536)){
@@ -579,7 +578,6 @@ struct alarm_cfg *a;
 		logit("Couldn't match any target to the echo reply.\n");
 		return;
 	}
-	previous_received=t->last_received;
 	if (ti->seq>t->last_received) t->last_received=ti->seq;
 	t->last_received_tv=time_recv;
 	timersub(&time_recv,&ti->timestamp,&tv);
@@ -608,7 +606,6 @@ struct alarm_cfg *a;
 
 	debug("(avg. loss: %5.1f%%)",avg_loss);
 	
-	paa=NULL;
 	for(aal=t->active_alarms;aal;aal=naa){
 		naa=aal->next;
 		a=aal->alarm;
